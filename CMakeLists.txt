@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include(ProjectOptions.cmake)
+setup_options()
+local_options()
+target_compile_features(default_interface INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
+add_library(${PROJECT_NAME}::default_interface ALIAS default_interface)
 
 add_subdirectory(apps)
 add_subdirectory(libraries)

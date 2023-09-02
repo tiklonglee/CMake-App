@@ -21,6 +21,12 @@ target_include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}/include
 )
 
+target_link_libraries(
+    core
+    PRIVATE
+        ${PROJECT_NAME}::default_interface
+)
+
 set_target_properties(
     core
     PROPERTIES
