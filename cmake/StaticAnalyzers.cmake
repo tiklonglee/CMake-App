@@ -51,3 +51,22 @@ macro(enable_cppcheck)
         message(WARNING "Cannot found cppcheck executable")
     endif()
 endmacro()
+
+# Set up static analysis with include-what-you-use
+macro(enable_include_what_you_use)
+    find_program(INCLUDE_WHAT_YOU_USE include-what-you-use)
+
+    if(INCLUDE_WHAT_YOU_USE)
+        message(STATUS "Enabled ${INCLUDE_WHAT_YOU_USE}")
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+            ${INCLUDE_WHAT_YOU_USE}
+            -Xiwyu --mapping_file=${CMAKE_SOURCE_DIR}/.iwyu.imp
+        )
+
+        if(WARNINGS_AS_ERRORS)
+            list(APPEND CMAKE_CXX_INCLUDE_WHAT_YOU_USE -Xiwyu --error)
+        endif()
+    else()
+        message(WARNING "Cannot found include-what-you-use executable")
+    endif()
+endmacro()
