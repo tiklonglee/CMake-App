@@ -3,6 +3,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 macro(setup_options)
     option(WARNINGS_AS_ERRORS "Consider Warnings As Errors" ON)
+    option(ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
 endmacro()
 
 macro(local_options)
@@ -13,4 +14,9 @@ macro(local_options)
 
     include(cmake/CompilerWarnings.cmake)
     set_target_warnings(default_interface)
+
+    include(cmake/StaticAnalyzers.cmake)
+    if(ENABLE_CLANG_TIDY)
+        enable_clang_tidy()
+    endif()
 endmacro()
