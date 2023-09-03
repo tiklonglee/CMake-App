@@ -70,3 +70,9 @@ macro(enable_include_what_you_use)
         message(WARNING "Cannot found include-what-you-use executable")
     endif()
 endmacro()
+
+# Set up static analysis with link-what-you-use
+macro(enable_link_what_you_use)
+    message(STATUS "Enabled link-what-you-use")
+    set(CMAKE_CXX_LINK_WHAT_YOU_USE ON)
+endmacro()
