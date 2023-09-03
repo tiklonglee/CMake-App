@@ -20,3 +20,34 @@ macro(enable_clang_tidy)
         message(WARNING "Cannot found clang-tidy executable or using non-clang compiler")
     endif()
 endmacro()
+
+# Set up static analysis with cppcheck
+macro(enable_cppcheck)
+    find_program(CPPCHECK cppcheck)
+
+    if(CPPCHECK)
+        message(STATUS "Enabled ${CPPCHECK}")
+        if(CMAKE_GENERATOR MATCHES ".*Visual Studio.*")
+            set(CPPCHECK_TEMPLATE "vs")
+        else()
+            set(CPPCHECK_TEMPLATE "gcc")
+        endif()
+
+        set(CMAKE_CXX_CPPCHECK
+            ${CPPCHECK}
+            --template=${CPPCHECK_TEMPLATE}
+            --enable=style,performance,warning,portability
+            --inline-suppr
+        )
+
+        if(WARNINGS_AS_ERRORS)
+            list(APPEND CMAKE_CXX_CPPCHECK --error-exitcode=2)
+        endif()
+
+        if(CMAKE_CXX_STANDARD)
+            list(APPEND CMAKE_CXX_CPPCHECK --std=c++${CMAKE_CXX_STANDARD})
+        endif()
+    else()
+        message(WARNING "Cannot found cppcheck executable")
+    endif()
+endmacro()
