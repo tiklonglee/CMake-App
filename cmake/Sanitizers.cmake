@@ -1,0 +1,65 @@
+# Set up sanitizers flags
+function(add_sanitizers_if_available curr_sanitizers sanitizer)
+    include(CheckCXXSourceCompiles)
+
+    if(MSVC)
+        set(CMAKE_REQUIRED_FLAGS /fsanitize=${sanitizer})
+    else()
+        set(CMAKE_REQUIRED_FLAGS -fsanitize=${sanitizer})
+    endif()
+    check_cxx_source_compiles("int main() { return 0; }" CAN_ENABLE_SANITIZER_${sanitizer})
+
+    if(CAN_ENABLE_SANITIZER_${sanitizer})
+        list(APPEND ${curr_sanitizers} ${sanitizer})
+    else()
+        message(WARNING "Cannot enable ${sanitizer} sanitizer")
+    endif()
+
+    return(PROPAGATE ${curr_sanitizers})
+endfunction()
+
+function(enable_sanitizers target)
+    set(SANITIZERS "")
+
+    if(ENABLE_SANITIZER_ADDRESS)
+        add_sanitizers_if_available(SANITIZERS "address")
+    endif()
+
+    if(ENABLE_SANITIZER_LEAK)
+        add_sanitizers_if_available(SANITIZERS "leak")
+    endif()
+
+    if(ENABLE_SANITIZER_UNDEFINED)
+        add_sanitizers_if_available(SANITIZERS "undefined")
+    endif()
+
+    if(ENABLE_SANITIZER_THREAD)
+        if("address" IN_LIST SANITIZERS OR "leak" IN_LIST SANITIZERS)
+            message(WARNING "Cannot enable thread sanitizer together with address or leak sanitizer")
+        else()
+            add_sanitizers_if_available(SANITIZERS "thread")
+        endif()
+    endif()
+
+    if(ENABLE_SANITIZER_MEMORY)
+        if("address" IN_LIST SANITIZERS OR "leak" IN_LIST SANITIZERS OR "thread" IN_LIST SANITIZERS)
+            message(WARNING "Cannot enable memory sanitizer together with address, leak, or thread sanitizer")
+        else()
+            add_sanitizers_if_available(SANITIZERS "memory")
+        endif()
+    endif()
+
+    list(JOIN SANITIZERS "," LIST_OF_SANITIZERS)
+
+    if(LIST_OF_SANITIZERS)
+        message(STATUS "Enabled ${SANITIZERS} sanitizer")
+        if (MSVC)
+            target_compile_options(${target} INTERFACE /fsanitize=${LIST_OF_SANITIZERS} /Zi /INCREMENTAL:NO)
+            target_compile_definitions(${target} INTERFACE _DISABLE_VECTOR_ANNOTATION _DISABLE_STRING_ANNOTATION)
+            target_link_options(${target} INTERFACE /INCREMENTAL:NO)
+        else()
+            target_compile_options(${target} INTERFACE -fsanitize=${LIST_OF_SANITIZERS})
+            target_link_options(${target} INTERFACE -fsanitize=${LIST_OF_SANITIZERS})
+        endif()
+    endif()
+endfunction()
