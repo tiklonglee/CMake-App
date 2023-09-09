@@ -1,0 +1,11 @@
+# Enable ipo if available
+macro(enable_ipo)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT result OUTPUT output LANGUAGES CXX)
+    if(result)
+        message(STATUS "Enabled IPO")
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+    else()
+        message(WARNING "IPO is not supported: ${output}")
+    endif()
+endmacro()

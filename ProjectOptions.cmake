@@ -13,6 +13,8 @@ macro(setup_options)
     option(ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" OFF)
     option(ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
     option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+
+    option(ENABLE_IPO "Enable IPO/LTO" ON)
 endmacro()
 
 macro(local_options)
@@ -40,4 +42,9 @@ macro(local_options)
 
     include(cmake/Sanitizers.cmake)
     enable_sanitizers(default_interface)
+
+    if(ENABLE_IPO)
+        include(cmake/InterproceduralOptimization.cmake)
+        enable_ipo()
+    endif()
 endmacro()
