@@ -2,6 +2,8 @@
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 macro(setup_options)
+    option(ENABLE_IPO "Enable IPO/LTO" ON)
+
     option(WARNINGS_AS_ERRORS "Consider Warnings As Errors" ON)
     option(ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
     option(ENABLE_CPPCHECK "Enable cpp-check" ON)
@@ -18,6 +20,11 @@ endmacro()
 macro(local_options)
     message(STATUS "Configuring local options start")
     add_library(default_interface INTERFACE)
+
+    if(ENABLE_IPO)
+        include(cmake/InterproceduralOptimization.cmake)
+        enable_ipo()
+    endif()
 
     include(cmake/CompilerWarnings.cmake)
     set_target_warnings(default_interface)
