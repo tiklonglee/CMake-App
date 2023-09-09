@@ -3,6 +3,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 macro(setup_options)
     option(ENABLE_IPO "Enable IPO/LTO" ON)
+    option(ENABLE_USER_LINKER "Enable user-chosen linker" OFF)
 
     option(WARNINGS_AS_ERRORS "Consider Warnings As Errors" ON)
     option(ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
@@ -26,6 +27,11 @@ macro(local_options)
     if(ENABLE_IPO)
         include(cmake/InterproceduralOptimization.cmake)
         enable_ipo()
+    endif()
+
+    if(ENABLE_USER_LINKER)
+        include(cmake/Linker.cmake)
+        configure_linker(default_interface)
     endif()
 
     include(cmake/CompilerWarnings.cmake)
