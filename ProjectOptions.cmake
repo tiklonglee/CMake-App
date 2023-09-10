@@ -16,6 +16,8 @@ macro(setup_options)
     option(ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" OFF)
     option(ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
     option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+
+    option(ENABLE_PCH "Enable PCH" OFF)
 endmacro()
 
 macro(local_options)
@@ -53,4 +55,12 @@ macro(local_options)
 
     include(cmake/Sanitizers.cmake)
     enable_sanitizers(default_interface)
+
+    if(ENABLE_PCH)
+        message(STATUS "Enabled PCH")
+        target_precompile_headers(
+            default_interface
+            INTERFACE
+        )
+    endif()
 endmacro()
