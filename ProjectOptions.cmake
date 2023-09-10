@@ -15,6 +15,7 @@ macro(setup_options)
     option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
 
     option(ENABLE_IPO "Enable IPO/LTO" ON)
+    option(ENABLE_PCH "Enable PCH" OFF)
 endmacro()
 
 macro(local_options)
@@ -46,5 +47,13 @@ macro(local_options)
     if(ENABLE_IPO)
         include(cmake/InterproceduralOptimization.cmake)
         enable_ipo()
+    endif()
+
+    if(ENABLE_PCH)
+        message(STATUS "Enabled PCH")
+        target_precompile_headers(
+            default_interface
+            INTERFACE
+        )
     endif()
 endmacro()
