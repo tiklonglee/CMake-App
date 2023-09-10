@@ -16,6 +16,7 @@ macro(setup_options)
 
     option(ENABLE_IPO "Enable IPO/LTO" ON)
     option(ENABLE_PCH "Enable PCH" OFF)
+    option(ENABLE_CACHE "Enable ccache" ON)
 endmacro()
 
 macro(local_options)
@@ -55,5 +56,10 @@ macro(local_options)
             default_interface
             INTERFACE
         )
+    endif()
+
+    if(ENABLE_CACHE)
+        include(cmake/Cache.cmake)
+        enable_cache()
     endif()
 endmacro()
