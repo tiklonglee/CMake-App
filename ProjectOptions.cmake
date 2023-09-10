@@ -18,6 +18,7 @@ macro(setup_options)
     option(ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
 
     option(ENABLE_PCH "Enable PCH" OFF)
+    option(ENABLE_CACHE "Enable ccache" ON)
 endmacro()
 
 macro(local_options)
@@ -60,5 +61,10 @@ macro(local_options)
             default_interface
             INTERFACE
         )
+    endif()
+
+    if(ENABLE_CACHE)
+        include(cmake/Cache.cmake)
+        enable_cache()
     endif()
 endmacro()
