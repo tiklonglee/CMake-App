@@ -11,3 +11,11 @@ local_options()
 
 add_subdirectory(apps)
 add_subdirectory(libraries)
+
+block(SCOPE_FOR VARIABLES)
+    unset(CMAKE_CXX_CLANG_TIDY)
+    unset(CMAKE_CXX_CPPCHECK)
+    unset(CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
+    unset(CMAKE_CXX_LINK_WHAT_YOU_USE)
+    add_subdirectory(dependencies)
+endblock()
