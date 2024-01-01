@@ -25,3 +25,8 @@ if(BUILD_TESTING)
     message(STATUS "Going to build tests")
     add_subdirectory(tests)
 endif()
+
+if(BUILD_FUZZ_TESTS)
+    message(STATUS "Going to build fuzz tests")
+    add_subdirectory(fuzz_tests)
+endif()
