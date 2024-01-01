@@ -21,6 +21,10 @@ macro(setup_options)
     option(ENABLE_PCH "Enable PCH" OFF)
     option(ENABLE_CACHE "Enable ccache" ON)
     option(ENABLE_UNITY_BUILD "Enable unity builds" OFF)
+
+    include(cmake/LibFuzzer.cmake)
+    check_libfuzzer_support(LIBFUZZER_SUPPORTED)
+    option(BUILD_FUZZ_TESTS "Enable fuzz testing executable" ${LIBFUZZER_SUPPORTED})
 endmacro()
 
 macro(local_options)
