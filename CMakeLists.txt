@@ -9,6 +9,7 @@ include(ProjectOptions.cmake)
 setup_options()
 local_options()
 
+add_subdirectory(configure_files)
 add_subdirectory(apps)
 add_subdirectory(libraries)
 
