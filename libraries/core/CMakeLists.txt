@@ -21,6 +21,8 @@ target_include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}/include
 )
 
+target_include_configure_files(core)
+
 target_link_libraries(
     core
     PRIVATE
