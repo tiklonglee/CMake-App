@@ -1,0 +1,13 @@
+#pragma once
+
+#include <string_view>
+
+namespace cfg
+{
+
+    inline constexpr auto name = std::string_view{"@PROJECT_NAME@"};
+    inline constexpr auto version = std::string_view{"@PROJECT_VERSION@"};
+    inline constexpr auto git_sha = std::string_view{"@GIT_SHA@"};
+    inline constexpr auto timestamp = std::string_view{"@TIMESTAMP@"};
+
+}  // namespace cfg
