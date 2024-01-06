@@ -17,8 +17,9 @@ target_sources(
 target_include_directories(
     core
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}/include
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${CMAKE_BINARY_DIR}/configure_files/include
 )
@@ -39,7 +40,16 @@ set_target_properties(
 )
 
 generate_export_header(core EXPORT_FILE_NAME ${CMAKE_CURRENT_BINARY_DIR}/include/core/core_export.hpp)
+set_target_properties(core PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_BINARY_DIR}/include/core/core_export.hpp)
 
 if(NOT BUILD_SHARED_LIBS)
     target_compile_definitions(core PUBLIC CORE_STATIC_DEFINE)
 endif()
+
+library_package(
+    TARGETS
+        core
+        default_interface
+    COMPONENT
+        core
+)
