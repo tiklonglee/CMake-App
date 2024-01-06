@@ -6,3 +6,5 @@ target_link_libraries(
         ${PROJECT_NAME}::default_interface
         ${PROJECT_NAME}::core
 )
+
+application_package(TARGETS app)
