@@ -1,2 +1,11 @@
 # Symlink for clang-tools
 compile_commands.json
+
+# User specific
+CMakeUserPresets.json
+
+# Output directory
+build/
+
+# IDE
+.vs/

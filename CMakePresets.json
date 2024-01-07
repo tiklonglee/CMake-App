@@ -1,0 +1,777 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "displayName": "General configuration",
+            "description": "General configuration that apply to all systems",
+            "generator": "Ninja Multi-Config",
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "windows",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Windows configuration",
+            "description": "Windows configuration that apply to msvc and clang",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "toolset": {
+                "value": "host=x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "ENABLE_CLANG_TIDY": "FALSE"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [ "Windows" ]
+                }
+            }
+        },
+        {
+            "name": "macos",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "MacOS configuration",
+            "description": "MacOS configuration that apply to clang and gcc",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "linux",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Linux configuration",
+            "description": "Linux configuration that apply to clang and gcc",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "hostOS": [ "Linux" ]
+                },
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+                }
+            }
+        },
+        {
+            "name": "windows-msvc",
+            "inherits": "windows",
+            "displayName": "Window msvc configuration",
+            "description": "Windows configuration for the msvc compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "cl"
+            }
+        },
+        {
+            "name": "windows-clang",
+            "inherits": "windows",
+            "displayName": "Window clang configuration",
+            "description": "Windows configuration for the clang compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            },
+            "vendor": {
+                "microsoft.com/VisualStudioSettings/CMake/1.0": {
+                    "intelliSenseMode": "windows-clang-x64"
+                }
+            }
+        },
+        {
+            "name": "macos-clang",
+            "inherits": "macos",
+            "displayName": "MacOS clang configuration",
+            "description": "MacOS configuration for the clang compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "macos-gcc",
+            "inherits": "macos",
+            "displayName": "MacOS gcc configuration",
+            "description": "MacOS configuration for the gcc compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++",
+                "ENABLE_CLANG_TIDY": "FALSE"
+            }
+        },
+        {
+            "name": "linux-clang",
+            "inherits": "linux",
+            "displayName": "Linux clang configuration",
+            "description": "Linux configuration for the clang compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "linux-gcc",
+            "inherits": "linux",
+            "displayName": "Linux gcc configuration",
+            "description": "Linux configuration for the gcc compiler",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++",
+                "ENABLE_CLANG_TIDY": "FALSE"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "windows",
+            "hidden": true,
+            "displayName": "Windows build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "macos",
+            "hidden": true,
+            "displayName": "MacOS build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "linux",
+            "hidden": true,
+            "displayName": "Linux build",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "windows-msvc-debug",
+            "inherits": "windows",
+            "displayName": "Windows msvc Debug build",
+            "configurePreset": "windows-msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "windows-msvc-release",
+            "inherits": "windows",
+            "displayName": "Windows msvc Release build",
+            "configurePreset": "windows-msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-msvc-relwithdebinfo",
+            "inherits": "windows",
+            "displayName": "Windows msvc RelWithDebInfo build",
+            "configurePreset": "windows-msvc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "windows-clang-debug",
+            "inherits": "windows",
+            "displayName": "Windows clang Debug build",
+            "configurePreset": "windows-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "windows-clang-release",
+            "inherits": "windows",
+            "displayName": "Windows clang Release build",
+            "configurePreset": "windows-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-clang-relwithdebinfo",
+            "inherits": "windows",
+            "displayName": "Windows clang RelWithDebInfo build",
+            "configurePreset": "windows-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "macos-clang-debug",
+            "inherits": "macos",
+            "displayName": "MacOS clang Debug build",
+            "configurePreset": "macos-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-clang-release",
+            "inherits": "macos",
+            "displayName": "MacOS clang Release build",
+            "configurePreset": "macos-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "macos-clang-relwithdebinfo",
+            "inherits": "macos",
+            "displayName": "MacOS clang RelWithDebInfo build",
+            "configurePreset": "macos-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "macos-gcc-debug",
+            "inherits": "macos",
+            "displayName": "MacOS gcc Debug build",
+            "configurePreset": "macos-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-gcc-release",
+            "inherits": "macos",
+            "displayName": "MacOS gcc Release build",
+            "configurePreset": "macos-gcc",
+            "configuration": "Release"
+        },
+        {
+            "name": "macos-gcc-relwithdebinfo",
+            "inherits": "macos",
+            "displayName": "MacOS gcc RelWithDebInfo build",
+            "configurePreset": "macos-gcc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "linux-clang-debug",
+            "inherits": "linux",
+            "displayName": "Linux clang Debug build",
+            "configurePreset": "linux-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux-clang-release",
+            "inherits": "linux",
+            "displayName": "Linux clang Release build",
+            "configurePreset": "linux-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "linux-clang-relwithdebinfo",
+            "inherits": "linux",
+            "displayName": "Linux clang RelWithDebInfo build",
+            "configurePreset": "linux-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "linux-gcc-debug",
+            "inherits": "linux",
+            "displayName": "Linux gcc Debug build",
+            "configurePreset": "linux-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux-gcc-release",
+            "inherits": "linux",
+            "displayName": "Linux gcc Release build",
+            "configurePreset": "linux-gcc",
+            "configuration": "Release"
+        },
+        {
+            "name": "linux-gcc-relwithdebinfo",
+            "inherits": "linux",
+            "displayName": "Linux gcc RelWithDebInfo build",
+            "configurePreset": "linux-gcc",
+            "configuration": "RelWithDebInfo"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "displayName": "General test",
+            "description": "CMake test configuration that apply to all systems",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        },
+        {
+            "name": "windows",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Windows test",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "macos",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "MacOS test",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "linux",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Linux test",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "windows-msvc-debug",
+            "inherits": "windows",
+            "displayName": "Windows msvc Debug test",
+            "configurePreset": "windows-msvc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "windows-msvc-release",
+            "inherits": "windows",
+            "displayName": "Windows msvc Release test",
+            "configurePreset": "windows-msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-msvc-relwithdebinfo",
+            "inherits": "windows",
+            "displayName": "Windows msvc RelWithDebInfo test",
+            "configurePreset": "windows-msvc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "windows-clang-debug",
+            "inherits": "windows",
+            "displayName": "Windows clang Debug test",
+            "configurePreset": "windows-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "windows-clang-release",
+            "inherits": "windows",
+            "displayName": "Windows clang Release test",
+            "configurePreset": "windows-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-clang-relwithdebinfo",
+            "inherits": "windows",
+            "displayName": "Windows clang RelWithDebInfo test",
+            "configurePreset": "windows-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "macos-clang-debug",
+            "inherits": "macos",
+            "displayName": "MacOS clang Debug test",
+            "configurePreset": "macos-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-clang-release",
+            "inherits": "macos",
+            "displayName": "MacOS clang Release test",
+            "configurePreset": "macos-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "macos-clang-relwithdebinfo",
+            "inherits": "macos",
+            "displayName": "MacOS clang RelWithDebInfo test",
+            "configurePreset": "macos-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "macos-gcc-debug",
+            "inherits": "macos",
+            "displayName": "MacOS gcc Debug test",
+            "configurePreset": "macos-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "macos-gcc-release",
+            "inherits": "macos",
+            "displayName": "MacOS gcc Release test",
+            "configurePreset": "macos-gcc",
+            "configuration": "Release"
+        },
+        {
+            "name": "macos-gcc-relwithdebinfo",
+            "inherits": "macos",
+            "displayName": "MacOS gcc RelWithDebInfo test",
+            "configurePreset": "macos-gcc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "linux-clang-debug",
+            "inherits": "linux",
+            "displayName": "Linux clang Debug test",
+            "configurePreset": "linux-clang",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux-clang-release",
+            "inherits": "linux",
+            "displayName": "Linux clang Release test",
+            "configurePreset": "linux-clang",
+            "configuration": "Release"
+        },
+        {
+            "name": "linux-clang-relwithdebinfo",
+            "inherits": "linux",
+            "displayName": "Linux clang RelWithDebInfo test",
+            "configurePreset": "linux-clang",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "linux-gcc-debug",
+            "inherits": "linux",
+            "displayName": "Linux gcc Debug test",
+            "configurePreset": "linux-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux-gcc-release",
+            "inherits": "linux",
+            "displayName": "Linux gcc Release test",
+            "configurePreset": "linux-gcc",
+            "configuration": "Release"
+        },
+        {
+            "name": "linux-gcc-relwithdebinfo",
+            "inherits": "linux",
+            "displayName": "Linux gcc RelWithDebInfo test",
+            "configurePreset": "linux-gcc",
+            "configuration": "RelWithDebInfo"
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "common",
+            "hidden": true,
+            "generators": [ "TGZ" ]
+        },
+        {
+            "name": "windows",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Windows Package",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "macos",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "MacOS Package",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            }
+        },
+        {
+            "name": "linux",
+            "hidden": true,
+            "inherits": "common",
+            "displayName": "Linux Package",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        },
+        {
+            "name": "windows-msvc",
+            "inherits": "windows",
+            "displayName": "Windows msvc Package",
+            "configurePreset": "windows-msvc"
+        },
+        {
+            "name": "windows-clang",
+            "inherits": "windows",
+            "displayName": "Windows clang Package",
+            "configurePreset": "windows-clang"
+        },
+        {
+            "name": "macos-clang",
+            "inherits": "macos",
+            "displayName": "MacOS clang Package",
+            "configurePreset": "macos-clang"
+        },
+        {
+            "name": "macos-gcc",
+            "inherits": "macos",
+            "displayName": "MacOS gcc Package",
+            "configurePreset": "macos-gcc"
+        },
+        {
+            "name": "linux-clang",
+            "inherits": "linux",
+            "displayName": "Linux clang Package",
+            "configurePreset": "linux-clang"
+        },
+        {
+            "name": "linux-gcc",
+            "inherits": "linux",
+            "displayName": "Linux gcc Package",
+            "configurePreset": "linux-gcc"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "windows-msvc",
+            "displayName": "Windows msvc workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-msvc"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msvc-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msvc-release"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-msvc-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msvc-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msvc-release"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-msvc-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "windows-msvc"
+                }
+            ]
+        },
+        {
+            "name": "windows-clang",
+            "displayName": "Windows clang workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "windows-clang"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-clang-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-clang-release"
+                },
+                {
+                    "type": "build",
+                    "name": "windows-clang-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-clang-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-clang-release"
+                },
+                {
+                    "type": "test",
+                    "name": "windows-clang-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "windows-clang"
+                }
+            ]
+        },
+        {
+            "name": "macos-clang",
+            "displayName": "MacOS clang workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "macos-clang"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-clang-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-clang-release"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-clang-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-clang-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-clang-release"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-clang-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "macos-clang"
+                }
+            ]
+        },
+        {
+            "name": "macos-gcc",
+            "displayName": "MacOS gcc workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "macos-gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-gcc-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-gcc-release"
+                },
+                {
+                    "type": "build",
+                    "name": "macos-gcc-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-gcc-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-gcc-release"
+                },
+                {
+                    "type": "test",
+                    "name": "macos-gcc-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "macos-gcc"
+                }
+            ]
+        },
+        {
+            "name": "linux-clang",
+            "displayName": "Linux clang workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "linux-clang"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-clang-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-clang-release"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-clang-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-clang-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-clang-release"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-clang-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "linux-clang"
+                }
+            ]
+        },
+        {
+            "name": "linux-gcc",
+            "displayName": "Linux gcc workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "linux-gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-gcc-debug"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-gcc-release"
+                },
+                {
+                    "type": "build",
+                    "name": "linux-gcc-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-gcc-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-gcc-release"
+                },
+                {
+                    "type": "test",
+                    "name": "linux-gcc-relwithdebinfo"
+                },
+                {
+                    "type": "package",
+                    "name": "linux-gcc"
+                }
+            ]
+        }
+    ]
+}
